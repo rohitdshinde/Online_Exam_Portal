@@ -1,0 +1,442 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Examdb_newModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblContent_questions">
+          <Key>
+            <PropertyRef Name="Question_id" />
+          </Key>
+          <Property Name="Question_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Content_id" Type="int" />
+          <Property Name="Question" Type="varchar(max)" />
+          <Property Name="Option_1" Type="varchar(max)" />
+          <Property Name="Option_2" Type="varchar(max)" />
+          <Property Name="Option_3" Type="varchar(max)" />
+          <Property Name="Option_4" Type="varchar(max)" />
+          <Property Name="Correct_option_number" Type="int" />
+        </EntityType>
+        <EntityType Name="tblStudent_details">
+          <Key>
+            <PropertyRef Name="Student_id" />
+          </Key>
+          <Property Name="Student_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Student_name" Type="varchar" MaxLength="100" />
+          <Property Name="Email_address" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Mobile_number" Type="varchar" MaxLength="10" />
+          <Property Name="Qualification" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="tblStudent_exam_questions">
+          <Key>
+            <PropertyRef Name="Exam_question_id" />
+          </Key>
+          <Property Name="Exam_question_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Exam_id" Type="int" />
+          <Property Name="Question_id" Type="int" />
+          <Property Name="Submited_option_number" Type="int" />
+        </EntityType>
+        <EntityType Name="tblStudent_exams">
+          <Key>
+            <PropertyRef Name="Exam_id" />
+          </Key>
+          <Property Name="Exam_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Student_id" Type="int" />
+          <Property Name="Topic_id" Type="int" />
+          <Property Name="Exam_date" Type="date" />
+          <Property Name="Start_time" Type="varchar" MaxLength="100" />
+          <Property Name="End_time" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="tblTopic_contents">
+          <Key>
+            <PropertyRef Name="Content_id" />
+          </Key>
+          <Property Name="Content_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Content_name" Type="varchar(max)" />
+          <Property Name="Topic_id" Type="int" />
+        </EntityType>
+        <EntityType Name="tblTopics">
+          <Key>
+            <PropertyRef Name="Topic_id" />
+          </Key>
+          <Property Name="Topic_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Topic_name" Type="varchar(max)" />
+        </EntityType>
+        <Association Name="fkcid">
+          <End Role="tblTopic_contents" Type="Self.tblTopic_contents" Multiplicity="0..1" />
+          <End Role="tblContent_questions" Type="Self.tblContent_questions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTopic_contents">
+              <PropertyRef Name="Content_id" />
+            </Principal>
+            <Dependent Role="tblContent_questions">
+              <PropertyRef Name="Content_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkeid">
+          <End Role="tblStudent_exams" Type="Self.tblStudent_exams" Multiplicity="0..1" />
+          <End Role="tblStudent_exam_questions" Type="Self.tblStudent_exam_questions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStudent_exams">
+              <PropertyRef Name="Exam_id" />
+            </Principal>
+            <Dependent Role="tblStudent_exam_questions">
+              <PropertyRef Name="Exam_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkqid">
+          <End Role="tblContent_questions" Type="Self.tblContent_questions" Multiplicity="0..1" />
+          <End Role="tblStudent_exam_questions" Type="Self.tblStudent_exam_questions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblContent_questions">
+              <PropertyRef Name="Question_id" />
+            </Principal>
+            <Dependent Role="tblStudent_exam_questions">
+              <PropertyRef Name="Question_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fksid">
+          <End Role="tblStudent_details" Type="Self.tblStudent_details" Multiplicity="0..1" />
+          <End Role="tblStudent_exams" Type="Self.tblStudent_exams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStudent_details">
+              <PropertyRef Name="Student_id" />
+            </Principal>
+            <Dependent Role="tblStudent_exams">
+              <PropertyRef Name="Student_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkt_id">
+          <End Role="tblTopics" Type="Self.tblTopics" Multiplicity="0..1" />
+          <End Role="tblStudent_exams" Type="Self.tblStudent_exams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTopics">
+              <PropertyRef Name="Topic_id" />
+            </Principal>
+            <Dependent Role="tblStudent_exams">
+              <PropertyRef Name="Topic_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fktid">
+          <End Role="tblTopics" Type="Self.tblTopics" Multiplicity="0..1" />
+          <End Role="tblTopic_contents" Type="Self.tblTopic_contents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTopics">
+              <PropertyRef Name="Topic_id" />
+            </Principal>
+            <Dependent Role="tblTopic_contents">
+              <PropertyRef Name="Topic_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Examdb_newModelStoreContainer">
+          <EntitySet Name="tblContent_questions" EntityType="Self.tblContent_questions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblStudent_details" EntityType="Self.tblStudent_details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblStudent_exam_questions" EntityType="Self.tblStudent_exam_questions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblStudent_exams" EntityType="Self.tblStudent_exams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblTopic_contents" EntityType="Self.tblTopic_contents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblTopics" EntityType="Self.tblTopics" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fkcid" Association="Self.fkcid">
+            <End Role="tblTopic_contents" EntitySet="tblTopic_contents" />
+            <End Role="tblContent_questions" EntitySet="tblContent_questions" />
+          </AssociationSet>
+          <AssociationSet Name="fkeid" Association="Self.fkeid">
+            <End Role="tblStudent_exams" EntitySet="tblStudent_exams" />
+            <End Role="tblStudent_exam_questions" EntitySet="tblStudent_exam_questions" />
+          </AssociationSet>
+          <AssociationSet Name="fkqid" Association="Self.fkqid">
+            <End Role="tblContent_questions" EntitySet="tblContent_questions" />
+            <End Role="tblStudent_exam_questions" EntitySet="tblStudent_exam_questions" />
+          </AssociationSet>
+          <AssociationSet Name="fksid" Association="Self.fksid">
+            <End Role="tblStudent_details" EntitySet="tblStudent_details" />
+            <End Role="tblStudent_exams" EntitySet="tblStudent_exams" />
+          </AssociationSet>
+          <AssociationSet Name="fkt_id" Association="Self.fkt_id">
+            <End Role="tblTopics" EntitySet="tblTopics" />
+            <End Role="tblStudent_exams" EntitySet="tblStudent_exams" />
+          </AssociationSet>
+          <AssociationSet Name="fktid" Association="Self.fktid">
+            <End Role="tblTopics" EntitySet="tblTopics" />
+            <End Role="tblTopic_contents" EntitySet="tblTopic_contents" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Examdb_newModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblContent_questions">
+          <Key>
+            <PropertyRef Name="Question_id" />
+          </Key>
+          <Property Name="Question_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Content_id" Type="Int32" />
+          <Property Name="Question" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Option_1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Option_2" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Option_3" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Option_4" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Correct_option_number" Type="Int32" />
+          <NavigationProperty Name="tblTopic_contents" Relationship="Self.fkcid" FromRole="tblContent_questions" ToRole="tblTopic_contents" />
+          <NavigationProperty Name="tblStudent_exam_questions" Relationship="Self.fkqid" FromRole="tblContent_questions" ToRole="tblStudent_exam_questions" />
+        </EntityType>
+        <EntityType Name="tblStudent_details">
+          <Key>
+            <PropertyRef Name="Student_id" />
+          </Key>
+          <Property Name="Student_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Student_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Email_address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Mobile_number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Qualification" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblStudent_exams" Relationship="Self.fksid" FromRole="tblStudent_details" ToRole="tblStudent_exams" />
+        </EntityType>
+        <EntityType Name="tblStudent_exam_questions">
+          <Key>
+            <PropertyRef Name="Exam_question_id" />
+          </Key>
+          <Property Name="Exam_question_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Exam_id" Type="Int32" />
+          <Property Name="Question_id" Type="Int32" />
+          <Property Name="Submited_option_number" Type="Int32" />
+          <NavigationProperty Name="tblContent_questions" Relationship="Self.fkqid" FromRole="tblStudent_exam_questions" ToRole="tblContent_questions" />
+          <NavigationProperty Name="tblStudent_exams" Relationship="Self.fkeid" FromRole="tblStudent_exam_questions" ToRole="tblStudent_exams" />
+        </EntityType>
+        <EntityType Name="tblStudent_exams">
+          <Key>
+            <PropertyRef Name="Exam_id" />
+          </Key>
+          <Property Name="Exam_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Student_id" Type="Int32" />
+          <Property Name="Topic_id" Type="Int32" />
+          <Property Name="Exam_date" Type="DateTime" Precision="0" />
+          <Property Name="Start_time" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="End_time" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblStudent_details" Relationship="Self.fksid" FromRole="tblStudent_exams" ToRole="tblStudent_details" />
+          <NavigationProperty Name="tblStudent_exam_questions" Relationship="Self.fkeid" FromRole="tblStudent_exams" ToRole="tblStudent_exam_questions" />
+          <NavigationProperty Name="tblTopic" Relationship="Self.fkt_id" FromRole="tblStudent_exams" ToRole="tblTopics" />
+        </EntityType>
+        <EntityType Name="tblTopic_contents">
+          <Key>
+            <PropertyRef Name="Content_id" />
+          </Key>
+          <Property Name="Content_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Content_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Topic_id" Type="Int32" />
+          <NavigationProperty Name="tblContent_questions" Relationship="Self.fkcid" FromRole="tblTopic_contents" ToRole="tblContent_questions" />
+          <NavigationProperty Name="tblTopic" Relationship="Self.fktid" FromRole="tblTopic_contents" ToRole="tblTopics" />
+        </EntityType>
+        <EntityType Name="tblTopic">
+          <Key>
+            <PropertyRef Name="Topic_id" />
+          </Key>
+          <Property Name="Topic_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Topic_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblStudent_exams" Relationship="Self.fkt_id" FromRole="tblTopics" ToRole="tblStudent_exams" />
+          <NavigationProperty Name="tblTopic_contents" Relationship="Self.fktid" FromRole="tblTopics" ToRole="tblTopic_contents" />
+        </EntityType>
+        <Association Name="fkcid">
+          <End Role="tblTopic_contents" Type="Self.tblTopic_contents" Multiplicity="0..1" />
+          <End Role="tblContent_questions" Type="Self.tblContent_questions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTopic_contents">
+              <PropertyRef Name="Content_id" />
+            </Principal>
+            <Dependent Role="tblContent_questions">
+              <PropertyRef Name="Content_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkqid">
+          <End Role="tblContent_questions" Type="Self.tblContent_questions" Multiplicity="0..1" />
+          <End Role="tblStudent_exam_questions" Type="Self.tblStudent_exam_questions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblContent_questions">
+              <PropertyRef Name="Question_id" />
+            </Principal>
+            <Dependent Role="tblStudent_exam_questions">
+              <PropertyRef Name="Question_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fksid">
+          <End Role="tblStudent_details" Type="Self.tblStudent_details" Multiplicity="0..1" />
+          <End Role="tblStudent_exams" Type="Self.tblStudent_exams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStudent_details">
+              <PropertyRef Name="Student_id" />
+            </Principal>
+            <Dependent Role="tblStudent_exams">
+              <PropertyRef Name="Student_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkeid">
+          <End Role="tblStudent_exams" Type="Self.tblStudent_exams" Multiplicity="0..1" />
+          <End Role="tblStudent_exam_questions" Type="Self.tblStudent_exam_questions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStudent_exams">
+              <PropertyRef Name="Exam_id" />
+            </Principal>
+            <Dependent Role="tblStudent_exam_questions">
+              <PropertyRef Name="Exam_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkt_id">
+          <End Role="tblTopics" Type="Self.tblTopic" Multiplicity="0..1" />
+          <End Role="tblStudent_exams" Type="Self.tblStudent_exams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTopics">
+              <PropertyRef Name="Topic_id" />
+            </Principal>
+            <Dependent Role="tblStudent_exams">
+              <PropertyRef Name="Topic_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fktid">
+          <End Role="tblTopics" Type="Self.tblTopic" Multiplicity="0..1" />
+          <End Role="tblTopic_contents" Type="Self.tblTopic_contents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTopics">
+              <PropertyRef Name="Topic_id" />
+            </Principal>
+            <Dependent Role="tblTopic_contents">
+              <PropertyRef Name="Topic_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Examdb_newEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblContent_questions" EntityType="Self.tblContent_questions" />
+          <EntitySet Name="tblStudent_details" EntityType="Self.tblStudent_details" />
+          <EntitySet Name="tblStudent_exam_questions" EntityType="Self.tblStudent_exam_questions" />
+          <EntitySet Name="tblStudent_exams" EntityType="Self.tblStudent_exams" />
+          <EntitySet Name="tblTopic_contents" EntityType="Self.tblTopic_contents" />
+          <EntitySet Name="tblTopics" EntityType="Self.tblTopic" />
+          <AssociationSet Name="fkcid" Association="Self.fkcid">
+            <End Role="tblTopic_contents" EntitySet="tblTopic_contents" />
+            <End Role="tblContent_questions" EntitySet="tblContent_questions" />
+          </AssociationSet>
+          <AssociationSet Name="fkqid" Association="Self.fkqid">
+            <End Role="tblContent_questions" EntitySet="tblContent_questions" />
+            <End Role="tblStudent_exam_questions" EntitySet="tblStudent_exam_questions" />
+          </AssociationSet>
+          <AssociationSet Name="fksid" Association="Self.fksid">
+            <End Role="tblStudent_details" EntitySet="tblStudent_details" />
+            <End Role="tblStudent_exams" EntitySet="tblStudent_exams" />
+          </AssociationSet>
+          <AssociationSet Name="fkeid" Association="Self.fkeid">
+            <End Role="tblStudent_exams" EntitySet="tblStudent_exams" />
+            <End Role="tblStudent_exam_questions" EntitySet="tblStudent_exam_questions" />
+          </AssociationSet>
+          <AssociationSet Name="fkt_id" Association="Self.fkt_id">
+            <End Role="tblTopics" EntitySet="tblTopics" />
+            <End Role="tblStudent_exams" EntitySet="tblStudent_exams" />
+          </AssociationSet>
+          <AssociationSet Name="fktid" Association="Self.fktid">
+            <End Role="tblTopics" EntitySet="tblTopics" />
+            <End Role="tblTopic_contents" EntitySet="tblTopic_contents" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Examdb_newModelStoreContainer" CdmEntityContainer="Examdb_newEntities">
+          <EntitySetMapping Name="tblContent_questions">
+            <EntityTypeMapping TypeName="Examdb_newModel.tblContent_questions">
+              <MappingFragment StoreEntitySet="tblContent_questions">
+                <ScalarProperty Name="Question_id" ColumnName="Question_id" />
+                <ScalarProperty Name="Content_id" ColumnName="Content_id" />
+                <ScalarProperty Name="Question" ColumnName="Question" />
+                <ScalarProperty Name="Option_1" ColumnName="Option_1" />
+                <ScalarProperty Name="Option_2" ColumnName="Option_2" />
+                <ScalarProperty Name="Option_3" ColumnName="Option_3" />
+                <ScalarProperty Name="Option_4" ColumnName="Option_4" />
+                <ScalarProperty Name="Correct_option_number" ColumnName="Correct_option_number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblStudent_details">
+            <EntityTypeMapping TypeName="Examdb_newModel.tblStudent_details">
+              <MappingFragment StoreEntitySet="tblStudent_details">
+                <ScalarProperty Name="Student_id" ColumnName="Student_id" />
+                <ScalarProperty Name="Student_name" ColumnName="Student_name" />
+                <ScalarProperty Name="Email_address" ColumnName="Email_address" />
+                <ScalarProperty Name="Mobile_number" ColumnName="Mobile_number" />
+                <ScalarProperty Name="Qualification" ColumnName="Qualification" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblStudent_exam_questions">
+            <EntityTypeMapping TypeName="Examdb_newModel.tblStudent_exam_questions">
+              <MappingFragment StoreEntitySet="tblStudent_exam_questions">
+                <ScalarProperty Name="Exam_question_id" ColumnName="Exam_question_id" />
+                <ScalarProperty Name="Exam_id" ColumnName="Exam_id" />
+                <ScalarProperty Name="Question_id" ColumnName="Question_id" />
+                <ScalarProperty Name="Submited_option_number" ColumnName="Submited_option_number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblStudent_exams">
+            <EntityTypeMapping TypeName="Examdb_newModel.tblStudent_exams">
+              <MappingFragment StoreEntitySet="tblStudent_exams">
+                <ScalarProperty Name="Exam_id" ColumnName="Exam_id" />
+                <ScalarProperty Name="Student_id" ColumnName="Student_id" />
+                <ScalarProperty Name="Topic_id" ColumnName="Topic_id" />
+                <ScalarProperty Name="Exam_date" ColumnName="Exam_date" />
+                <ScalarProperty Name="Start_time" ColumnName="Start_time" />
+                <ScalarProperty Name="End_time" ColumnName="End_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblTopic_contents">
+            <EntityTypeMapping TypeName="Examdb_newModel.tblTopic_contents">
+              <MappingFragment StoreEntitySet="tblTopic_contents">
+                <ScalarProperty Name="Content_id" ColumnName="Content_id" />
+                <ScalarProperty Name="Content_name" ColumnName="Content_name" />
+                <ScalarProperty Name="Topic_id" ColumnName="Topic_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblTopics">
+            <EntityTypeMapping TypeName="Examdb_newModel.tblTopic">
+              <MappingFragment StoreEntitySet="tblTopics">
+                <ScalarProperty Name="Topic_id" ColumnName="Topic_id" />
+                <ScalarProperty Name="Topic_name" ColumnName="Topic_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

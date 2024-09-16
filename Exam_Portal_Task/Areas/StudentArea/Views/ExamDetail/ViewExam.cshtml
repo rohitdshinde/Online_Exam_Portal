@@ -1,0 +1,102 @@
+﻿@model Exam_Portal_Task.Models.ExamModel
+@{
+    ViewBag.Title = "ViewExam";
+    Layout = "~/Areas/StudentArea/Views/Shared/LayoutView.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <table class="table table-bordered">
+            <tr>
+                <td>Student Name :</td>
+                <td colspan="2">@Model.student_name</td>
+            </tr>
+            <tr>
+                <td>Topic Name :</td>
+                <td colspan="2">@Model.topic_name</td>
+            </tr>
+            <tr>
+                <td>Total Questions :</td>
+                <td>@Model.questions.Count</td>
+                <td>Correct Questions:<b> @ViewBag.correct_count</b></td>
+                <td>Wrong Questions:<b> @ViewBag.wrong_count</b></td>
+            </tr>
+            <tr>
+                <td>Exam Date: @Model.start_date.ToShortDateString()</td>
+                <td>Start Time: @Model.start_time</td>
+                <td>End Time: @Model.end_time</td>
+            </tr>
+        </table>
+        <h3>Content Wise Evaluation</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Content</th>
+                    <th>Total Questions</th>
+                    <th>Correct Questions</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var contentPercentage in ViewBag.ContentPercentages)
+                {
+                    <tr>
+                        <td>@contentPercentage.ContentName</td>
+                        <td>@contentPercentage.TotalQuestions</td>
+                        <td>@contentPercentage.CorrectQuestions</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: @contentPercentage.Percentage%" aria-valuenow="@contentPercentage.Percentage" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                                <span class="progress-value">@contentPercentage.Percentage%</span>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <hr />
+        <div class="row">
+            @foreach (var item in Model.questions)
+            {
+                string color = "red";
+                if (item.status == "Correct")
+                {
+                    color = "green";
+                }
+                <div class="card">
+                    <div class="card-body">
+                        <pre>
+                                @item.question
+                        </pre>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                1) @item.option1
+                            </li>
+                            <li class="list-group-item">
+                                2) @item.option2
+                            </li>
+                            <li class="list-group-item">
+                                3) @item.option3
+                            </li>
+                            <li class="list-group-item">
+                                4) @item.option4
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <table class="table">
+                            <tr>
+                                <td>Submitted Option: <b>@item.submitted_option_number</b></td>
+                                <td>Correct Option: <b>@item.correct_option_number</b></td>
+                                <td>Result: <b style="color:@color">@item.status</b></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <hr />
+            }
+        </div>
+    </div>
+</div>

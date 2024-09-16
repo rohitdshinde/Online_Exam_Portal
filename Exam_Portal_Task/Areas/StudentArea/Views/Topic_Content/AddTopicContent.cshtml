@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Exam_Portal_Task.Models.tblTopic_contents>
+@{
+    ViewBag.Title = "AddTopicContent";
+    Layout = "~/Areas/StudentArea/Views/Shared/LayoutView.cshtml";
+}
+
+<h2>Add TopicContent</h2>
+<script>
+    var content = [];
+    $(document).ready(function () {
+        FetchTopic();
+        $("#btnadd").click(function () {
+            Filltable();
+        })
+        $("#btnsubmit").click(function () {
+            AddData();
+        })
+    })
+    function Filltable() {
+        var cname = $("#txtcname").val();
+        var t = { "Content_name": cname };
+        content.push(t);
+        Display();
+    }
+    function Display() {
+        $("#tbldata").empty();
+        $.each(content, function (i, d) {
+            $("#tbldata").append("<tr><td>" + (i + 1) + "</td><td>" + d.Content_name + "</td></tr>");
+        })
+    }
+    function AddData() {
+        var ts = $("#txtcname").val();
+        var t = $("#ddtopics").val();
+
+        var st = { "Content_name": ts ,"Topic_id":t};
+
+        $.ajax({
+            url: '/StudentArea/Topic_Content/AddTopicContent',
+            method: 'post',
+            data: JSON.stringify(st),
+            contentType: 'application/json',
+            success: function (resp) {
+                alert(resp);
+                console.log(resp);
+            }
+        })
+
+    }
+    function FetchTopic() {
+        $.ajax({
+            url: '/StudentArea/Topic/GetTopic',
+            method: 'get',
+            contentType: 'application/json',
+            success: function (resp) {
+                console.log(resp);
+                $.each(resp, function (i, d) {
+                    $("#ddtopics").append("<option value=" + d.Topic_id + ">" + d.Topic_name + "</option>")
+                })
+
+            }
+
+        })
+    }
+</script>
+<table>
+    <tr>
+        <td><label class="form-control">Topics Name</label></td>
+        <td><select id="ddtopics"><option selected disabled>Select Topics </option></select></td>
+    </tr>
+    <tr>
+        <td><label class="form-control">Content Name</label></td>
+        <td><input type="text" id="txtcname" class="form-control"/></td>
+        <td><input type="button" value="+" id="btnadd" class="form-control"/></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="Submit" id="btnsubmit"class="btn btn-success" /></td>
+    </tr>
+</table>
+<hr />
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Sr No.
+            </th>
+            <th>Content Name</th>
+            <th>Topic Name</th>
+        </tr>
+    </thead>
+    <tbody id="tbldata">
+        @{ 
+            int i = 1;
+        }
+        @foreach(var item in Model)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@item.Content_name</td>
+                    <td>@item.tblTopic.Topic_name</td>
+                </tr>
+            i++;
+        }
+    </tbody>
+</table>
+

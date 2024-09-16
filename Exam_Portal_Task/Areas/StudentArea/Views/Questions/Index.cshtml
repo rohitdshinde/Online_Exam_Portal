@@ -1,0 +1,199 @@
+﻿@model IEnumerable<Exam_Portal_Task.Models.tblContent_questions>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/StudentArea/Views/Shared/LayoutView.cshtml";
+}
+<script>
+    $(document).ready(function () {
+        $("#ddtopic").change(function () {
+            GetContents()
+        })
+    })
+
+    function GetContents() {
+        var tid = $("#ddtopic").val();
+        $.ajax({
+            url: '/StudentArea/Questions/GetTopicWiseContents/' + tid,
+            method: 'get',
+            contentType: 'application/json',
+            success: function (resp) {
+                console.log(resp);
+
+                $("#ddcontent").empty();
+                $("#ddcontent").append("<option selected disabled>Select Content</option>");
+
+                $.each(resp, function (i, d) {
+                    $("#ddcontent").append("<option value=" + d.Value + ">" + d.Text + "</option>");
+
+                })
+            }
+        })
+    }
+
+    function SubmitQuestion() {
+        var cid = $("#ddcontent").val();
+        var q = $("#question").val();
+        var op1 = $("#option1").val();
+        var op2 = $("#option2").val();
+        var op3 = $("#option3").val();
+        var op4 = $("#option4").val();
+        var correct_option = $("#correct_option_number").val();
+        var st = { "Content_id": cid, "Question": q, "Option_1": op1, "Option_2": op2, "Option_3": op3, "Option_4": op4, "Correct_option_number": correct_option };
+        $.ajax({
+            url: '/StudentArea/Questions/AddQuestion',
+            method: 'post',
+            data: JSON.stringify(st),
+            contentType: 'application/json',
+            success: function (resp) {
+                alert(resp);
+                window.location.href = "/StudentArea/Questions/Index";
+            }
+        })
+    }
+
+    function AddQuestion() {
+        $("#questionmodal").modal("show");
+    }
+</script>
+<div class="row">
+    <div class="col-md-9">
+        <input type="button" value="Add Question" onclick="AddQuestion()" class="btn btn-primary" />
+
+    </div>
+    <div class="col-md-3">
+        Total Question=<b>@Model.Count()</b>
+    </div>
+</div>
+<br />
+<br />
+<div class="row">
+    <div class="modal fade" id="questionmodal">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width:900px">
+                <div class="modal-header">
+
+                    <h4>Content Question</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                @Html.DropDownList("ddtopic", ViewBag.topic as List<SelectListItem>, "Select Topic", new { @class = "form-control" })
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <select id="ddcontent" class="form-control">
+                                    <option selected disabled>Select Content</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3">
+                          
+                                    @Html.TextArea("question", new { @class = "form-control", @placeholder = "Enter Question" })
+
+                           
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                @Html.TextArea("option1", new { @class = "form-control", @placeholder = "Enter Option 1" })
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="mb-3">
+                                @Html.TextArea("option2", new { @class = "form-control", @placeholder = "Enter Option 2" })
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                @Html.TextArea("option3", new { @class = "form-control", @placeholder = "Enter Option 3" })
+
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                @Html.TextArea("option4", new { @class = "form-control", @placeholder = "Enter Option 4" })
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3">
+
+                            @Html.TextArea("correct_option_number", new { @class = "form-control", @placeholder = "Enter Correct Option Number" })
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" value="Submit" onclick="SubmitQuestion()" />
+                    <h4 id="msg"></h4>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="row">
+    @{
+        int i = 1;
+    }
+    @foreach (var item in Model)
+    {
+        <div class="mb-3">
+
+            <div class="card">
+                <div class="card-header">
+                    <b>Question @i =>  </b>
+                    <br/>
+                    <pre>
+                        @item.Question
+                        </pre>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <p><b>1)</b> @item.Option_1</p>
+                        </li>
+                        <li class="list-group-item">
+                            <p><b>2)</b> @item.Option_2</p>
+                        </li>
+                        <li class="list-group-item">
+                            <p><b>3)</b> @item.Option_3</p>
+                        </li>
+                        <li class="list-group-item">
+                            <p><b>4)</b> @item.Option_4</p>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <p>Correct Option Number : @item.Correct_option_number</p>
+                </div>
+            </div>
+        </div>
+        i++;
+    }
+</div>

@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4" style="padding-top:100px">
+        @using (Html.BeginForm())
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h4>Select Topic</h4>
+
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        @Html.DropDownList("topic_id",ViewBag.topics as List<SelectListItem>,"Select Topic", new {@class="form-control"})
+                    </div>
+
+
+                </div>
+                <div class="card-footer">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

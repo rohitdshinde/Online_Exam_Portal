@@ -1,0 +1,113 @@
+﻿@model Exam_Portal_Task.Models.ExamModel
+@{
+    ViewBag.Title = "StartExam";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    var questions = [];
+    $(document).ready(function () {
+        $("#btnsubmit").click(function () {
+            SubmitExam();
+        })
+    })
+
+    function SubmitOption(qid, op) {
+      //  alert(qid+" "+op)
+
+        var index = -1;
+        var st = { "question_id": qid, "submitted_option_number": op };
+
+        $.each(questions, function (i, d) {
+            if (d.question_id == qid) {
+                index = i;
+              
+            }
+        })
+        if (index == -1) {
+            questions.push(st)
+
+        }
+        else {
+            questions.splice(index, 1);
+            questions.push(st)
+
+        }
+        console.log(questions)
+    }
+
+
+    function SubmitExam() {
+        $.ajax({
+            url: '/Exam/SubmitExam',
+            method: 'post',
+            data: JSON.stringify(questions),
+            contentType: 'application/json',
+            success: function (resp) {
+                alert(resp);
+                window.location.href="/Exam/"
+            }
+        })
+    }
+</script>
+<div class="row">
+    <table class="table">
+        <tr>
+            <td> <h4>Exam For - @Model.topic_name</h4></td>
+            <td> <h4>Start Date - @Model.start_date.ToShortDateString()</h4></td>
+            <td> <h4>Start Time - @Model.start_time</h4></td>
+
+        </tr>
+    </table>
+</div>
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      
+        @{
+            int i = 1;
+        }
+        @foreach (var item in Model.questions)
+        {
+            <div class="card" style="margin-bottom:10px;">
+                <div class="card-body">
+                    <pre style="padding-left:0px">
+                    <b>@i) </b>  @item.question
+                        </pre>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div>
+                                <input type="radio" name="rd_@item.question_id" onchange="SubmitOption(@item.question_id,1)" /> <span>@item.option1</span>
+
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div>
+                                <input type="radio" name="rd_@item.question_id" onchange="SubmitOption(@item.question_id,2)" /> <span>@item.option2</span>
+
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div>
+                                <input type="radio" name="rd_@item.question_id" onchange="SubmitOption(@item.question_id,3)" /> <span>@item.option3</span>
+
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div>
+                                <input type="radio" name="rd_@item.question_id" onchange="SubmitOption(@item.question_id,4)" /> <span>@item.option4</span>
+
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            i++;
+        }
+   
+    <input type="button" value="Submit" class="btn btn-primary" id="btnsubmit" />
+    </div> 
+    <div class="col-md-2"></div>
+</div>
+

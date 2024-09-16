@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Exam_Portal_Task.Models.tblTopic>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/StudentArea/Views/Shared/LayoutView.cshtml";
+}
+
+<h2>Add Topics</h2>
+<script>
+    var topic = [];
+    $(document).ready(function () {
+        $("#btnadd").click(function(){
+            Filltable();
+        })
+        $("#btnsubmit").click(function () {
+            AddData();
+        })
+    })
+    function Filltable() {
+        var tname = $("#txttname").val();
+        var t = { "Topic_name": tname };
+        topic.push(t);
+        Display();
+    }
+    function Display() {
+        $("#tbldata").empty();
+        $.each(topic, function (i, d) {
+            $("#tbldata").append("<tr><td>" + (i + 1) + "</td><td>" + d.Topic_name + "</td></tr>");
+        })
+    }
+    function AddData() {
+        var ts = $("#txttname").val();
+
+        var st = { "Topic_name": ts };
+
+        $.ajax({
+            url:'/StudentArea/Topic/AddTopics',
+            method: 'post',
+            data: JSON.stringify(st),
+            contentType:'application/json',
+            success: function (resp) {
+                alert(resp);
+                console.log(resp);
+            }
+        })
+        
+    }
+</script>
+
+<table>
+    <tr>
+        <td><label class="form-control">Topic Name</label></td>
+        <td><input type="text"id="txttname" class="form-control" /></td>
+        <td><input type="button" value="+" id="btnadd" width="100" /></td>
+
+    </tr>
+    <tr>
+        <td><input type="button"value="Submit"id="btnsubmit" class="btn btn-success"/></td>
+    </tr>
+    
+</table>
+<hr />
+<table class="table-bordered">
+    <thead>
+        <tr>
+            <th>Sr No</th>
+            <th>Topic Name</th>
+        </tr>
+    </thead>
+    <tbody id="tbldata">
+        @{ 
+            int i = 1;
+        }
+        @foreach(var item in Model)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@item.Topic_name</td>
+                </tr>
+            i++;
+        }
+    </tbody>
+</table>
