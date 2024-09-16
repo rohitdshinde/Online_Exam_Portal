@@ -1,49 +1,42 @@
 # Online Exam Portal
 
 ## Project Description
-The **Online Exam Portal** is a web-based platform developed using **C#**, **ASP.NET**, **Ajax**, and **jQuery**, with **SQL Server** as the backend database. The portal provides an efficient system for conducting online exams. It enables students to register, take exams, and view results, while administrators can manage exams, students, and results with ease.
+The **Online Exam Portal** is a web application developed using **C#**, **ASP.NET**, **Ajax**, **jQuery**, and **SQL Server** as the backend database. It enables students to take exams online and allows admins to manage exams, questions, and results.
 
 ## Features
-- **Student Features:**
-  - User registration and login.
-  - View available exams and take them online.
-  - Real-time exam countdown timer.
-  - Automatic result generation upon exam completion.
-  - View past exam history and results.
+### Student Features:
+- User registration and login
+- Take exams with real-time countdown timers
+- Auto-grading of exams upon submission
+- View results and exam history
 
-- **Admin Features:**
-  - Admin login and dashboard.
-  - Create and manage exams (add/edit/delete questions).
-  - Manage students (add/edit/delete student records).
-  - View student exam results and performance analytics.
+### Admin Features:
+- Admin login and dashboard
+- Manage exams (add, edit, delete)
+- Manage questions for exams
+- View student results and manage student data
 
 ## Technologies Used
-- **Frontend:**
-  - HTML, CSS, JavaScript
-  - jQuery, Ajax
+- **Frontend:** HTML, CSS, JavaScript, jQuery, Ajax
+- **Backend:** C# and ASP.NET Framework
+- **Database:** SQL Server
+- **Tools:** Visual Studio, Git, GitHub
 
-- **Backend:**
-  - C# and ASP.NET Framework
-
-- **Database:**
-  - SQL Server
-
-- **Others:**
-  - Version control: Git & GitHub
-  - IDE: Visual Studio
-
-## How to Install and Run the Project
+## Getting Started
 
 ### Prerequisites
-- Ensure you have the following installed:
-  - **.NET Framework** (version used in the project, e.g., .NET Framework 4.7)
-  - **SQL Server**
-  - **Visual Studio**
-  - **Git**
+Before you begin, ensure you have met the following requirements:
+- Install **.NET Framework** (e.g., .NET Framework 4.7 or later).
+- Install **SQL Server** (with SQL Server Management Studio to manage the database).
+- Install **Visual Studio** (to open, build, and run the project).
+- Install **Git** (for version control).
 
-### Installation Steps
+### Installation and Setup
 
-1. **Clone the repository:**
+Follow these steps to get the project running locally:
+
+1. **Clone the Repository**
+   - Open a terminal or command prompt and run the following command:
    ```bash
    git clone https://github.com/your-username/online-exam-portal.git
    cd online-exam-portal
